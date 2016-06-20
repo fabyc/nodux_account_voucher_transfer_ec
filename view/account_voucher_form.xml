@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of the nodux_account_voucher_ec module for Tryton.
+The COPYRIGHT file at the top level of this repository contains
+the full copyright notices and license terms. -->
+
+<data>
+    <xpath expr="/form/field[@name=&quot;from_pay_invoice&quot;]"
+            position="after">
+            <label name="transfer"/>
+            <field name="transfer"/>
+            <newline/>
+            <label name="cuenta_caja"/>
+            <field name="cuenta_caja"/>
+            <newline/>
+            <label name="cuenta_transfer"/>
+            <field name="cuenta_transfer"/>
+            <newline/>
+            <label name="valor_caja"/>
+            <field name="valor_caja"/>
+            <newline/>
+            <group colspan="6" id="group_voucher_2">
+                <button name="transferir" string="_Transferir"/>
+            </group>
+    </xpath>
+
+</data>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- This file is part of the nodux_account_voucher_ec module for Tryton.
+The COPYRIGHT file at the top level of this repository contains
+the full copyright notices and license terms. -->
+<tryton>
+    <data>
+      <record model="ir.ui.view" id="account_voucher_form">
+          <field name="model">account.voucher</field>
+          <field name="type">form</field>
+          <field name="inherit"
+              ref="nodux_account_voucher_ec.account_voucher_form"/>
+          <field name="name">account_voucher_form</field>
+      </record>
+
+
+    <record model="ir.action.report" id="report_account_voucher_transfer">
+            <field name="name">Comprobante de ingreso(transferencia)</field>
+            <field name="model">account.voucher</field>
+            <field name="report_name">account.voucher_transfer.report</field>
+            <field name="report">nodux_account_voucher_transfer_ec/voucher.odt</field>
+    </record>
+
+    <record model="ir.action.keyword" id="report_account_voucher_transfer_keyword">
+        <field name="keyword">form_print</field>
+        <field name="model">account.voucher,-1</field>
+        <field name="action" ref="report_account_voucher_transfer"/>
+    </record>
+
+  </data>
+</tryton>
