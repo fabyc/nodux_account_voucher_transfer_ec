@@ -34,16 +34,19 @@ class AccountVoucher(ModelSQL, ModelView):
     valor_caja = fields.Numeric('Importe', states={
                 'invisible': ~Eval('transfer', True),
                 'readonly': In(Eval('state'), ['posted']),
+                'required':Eval('transfer', True),
                 })
 
     cuenta_caja = fields.Many2One('account.account', 'Cuenta inicial', help='Cuenta de la que se realizara la transferencia',states={
                 'invisible':  ~Eval('transfer', True),
                 'readonly': In(Eval('state'), ['posted']),
+                'required': Eval('transfer', True),
                 })
 
     cuenta_transfer = fields.Many2One('account.account', 'Cuenta a transferir el dinero', help = 'Cuenta a la que se realizara la transferencia',states={
                 'invisible':  ~Eval('transfer', True),
                 'readonly': In(Eval('state'), ['posted']),
+                'required': Eval('transfer', True),
                 })
 
 
