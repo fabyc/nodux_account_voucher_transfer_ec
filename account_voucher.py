@@ -6,7 +6,7 @@ from decimal import Decimal
 from trytond.model import ModelSingleton, ModelView, ModelSQL, fields
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, In
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.report import Report
 import pytz
 from datetime import datetime,timedelta
@@ -27,8 +27,8 @@ _STATES = {
     'readonly': In(Eval('state'), ['posted']),
 }
 
-class AccountVoucher(ModelSQL, ModelView):
-    'Account Voucher'
+class AccountVoucher():
+    __metaclass__ = PoolMeta
     __name__ = 'account.voucher'
 
     valor_caja = fields.Numeric('Importe', states={
@@ -178,25 +178,26 @@ class VoucherReportTransfer(Report):
     __name__ = 'account.voucher_transfer.report'
 
     @classmethod
-    def parse(cls, report, objects, data, localcontext=None):
+    def get_context(cls, records, data):
         Company = Pool().get('company.company')
         company_id = Transaction().context.get('company')
         company = Company(company_id)
+        report_context = super(InvoiceReport, cls).get_context(
+            records, data)
 
         if company.timezone:
             timezone = pytz.timezone(company.timezone)
             dt = datetime.now()
             hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
 
-        localcontext['company'] = company
-        localcontext['hora'] = hora.strftime('%H:%M:%S')
-        localcontext['fecha'] = hora.strftime('%d/%m/%Y')
-        localcontext['transfer'] = 'true'
+        report_context['company'] = company
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['fecha'] = hora.strftime('%d/%m/%Y')
+        report_context['transfer'] = 'true'
         new_objs = []
         for obj in objects:
             if obj.valor_caja and conversor and not obj.amount_to_pay_words:
                 obj.amount_to_pay_words = obj.get_amount2words(obj.valor_caja)
             new_objs.append(obj)
 
-        return super(VoucherReportTransfer, cls).parse(report,
-                new_objs, data, localcontext)
+        return report_context

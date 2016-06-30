@@ -6,9 +6,7 @@ the full copyright notices and license terms. -->
     <data>
       <record model="ir.ui.view" id="account_voucher_form">
           <field name="model">account.voucher</field>
-          <field name="type">form</field>
-          <field name="inherit"
-              ref="nodux_account_voucher_ec.account_voucher_form"/>
+          <field name="inherit" ref="nodux_account_voucher_ec.account_voucher_form"/>
           <field name="name">account_voucher_form</field>
       </record>
 
