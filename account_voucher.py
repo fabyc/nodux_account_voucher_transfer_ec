@@ -21,7 +21,7 @@ except:
     print("Please install it...!")
 
 
-__all__ = ['AccountVoucher', 'VoucherReportTransfer']
+__all__ = ['AccountVoucher', 'VoucherReportTransfer', 'AccountVoucherLineAccount']
 
 _STATES = {
     'readonly': In(Eval('state'), ['posted']),
@@ -34,14 +34,14 @@ class AccountVoucher(ModelSQL, ModelView):
     valor_caja = fields.Numeric('Importe', states={
                 'invisible': ~Eval('transfer', True),
                 'readonly': In(Eval('state'), ['posted']),
-                'required':Eval('transfer', True),
                 })
 
-    cuenta_caja = fields.Many2One('account.account', 'Cuenta inicial', help='Cuenta de la que se realizara la transferencia',states={
-                'invisible':  ~Eval('transfer', True),
-                'readonly': In(Eval('state'), ['posted']),
-                'required': Eval('transfer', True),
-                })
+    cuenta_inicial = fields.One2Many('account.voucher.line.account', 'voucher',
+        'Cuentas', states={
+                    'invisible':  ~Eval('transfer', True),
+                    'readonly': In(Eval('state'), ['posted']),
+                    'required': Eval('transfer', True),
+                    })
 
     cuenta_transfer = fields.Many2One('account.account', 'Cuenta a transferir el dinero', help = 'Cuenta a la que se realizara la transferencia',states={
                 'invisible':  ~Eval('transfer', True),
@@ -100,12 +100,8 @@ class AccountVoucher(ModelSQL, ModelView):
                 'move': move.id,
                 })
 
-        if self.valor_caja:
-            valor_new = self.valor_caja
-        else:
-            self.raise_user_error("No ha ingresado el valor a transferir")
-        if self.cuenta_caja:
-            cuenta_caja = self.cuenta_caja
+        if self.cuenta_inicial:
+            cuenta_inicial = self.cuenta_inicial
         else:
             self.raise_user_error("No ha ingresado la cuenta de la que realizara la transferencia")
         if self.cuenta_transfer:
@@ -113,21 +109,22 @@ class AccountVoucher(ModelSQL, ModelView):
         else:
             self.raise_user_error("No ha ingresado la cuenta a la que realizara la transferencia")
 
+        total_amount = Decimal(0.0)
+        for line in cuenta_inicial:
+            total_amount += line.pay_amount
+            move_lines.append({
+                'description': self.number,
+                'debit': Decimal(0.0),
+                'credit': line.pay_amount,
+                'account': line.account.id,
+                'move': move.id,
+                'journal': self.journal.id,
+                'period': Period.find(self.company.id, date=self.date),
+                })
 
         move_lines.append({
             'description': self.number,
-            'debit': Decimal(0.0),
-            'credit': valor_new,
-            'account': cuenta_caja.id,
-            'move': move.id,
-            'journal': self.journal.id,
-            'period': Period.find(self.company.id, date=self.date),
-            })
-        print "La move lines", move_lines
-
-        move_lines.append({
-            'description': self.number,
-            'debit': valor_new,
+            'debit': total_amount,
             'credit': Decimal(0.0),
             'account': cuenta_transfer.id,
             'move': move.id,
@@ -135,17 +132,17 @@ class AccountVoucher(ModelSQL, ModelView):
             'period': Period.find(self.company.id, date=self.date),
             'date': self.date,
         })
-        print "LAs lineas creada en create ", move_lines
+        self.write([self], {
+            'valor_caja':total_amount,
+        })
         return move_lines
 
     def create_move_transfer(self, move_lines):
-        print "Las lineas ", move_lines
         pool = Pool()
         Move = pool.get('account.move')
         MoveLine = pool.get('account.move.line')
         Invoice = pool.get('account.invoice')
         created_lines = MoveLine.create(move_lines)
-        print "Lineas creadas ", created_lines
         Move.post([self.move])
         return True
 
@@ -159,7 +156,7 @@ class AccountVoucher(ModelSQL, ModelView):
         reconciled.account = self.cuenta_transfer
         reconciled.state = 'draft'
         reconciled.date = self.date
-        print "Guardar ", reconciled
+        reconciled.expired = self.date
         reconciled.save()
 
     @classmethod
@@ -172,6 +169,21 @@ class AccountVoucher(ModelSQL, ModelView):
             move_lines = voucher.prepare_lines_transfer()
             voucher.create_move_transfer(move_lines)
         cls.write(vouchers, {'state': 'posted'})
+
+class AccountVoucherLineAccount(ModelSQL, ModelView):
+    'Account Voucher Line Account'
+    __name__ = 'account.voucher.line.account'
+
+    voucher = fields.Many2One('account.voucher', 'Voucher', ondelete='CASCADE',
+        select=True)
+    account = fields.Many2One('account.account', 'Account',
+        required=True, states=_STATES)
+    pay_amount = fields.Numeric('Pay Amount', digits=(16, 2), required=True,
+        states=_STATES)
+
+    @classmethod
+    def __setup__(cls):
+        super(AccountVoucherLineAccount, cls).__setup__()
 
 class VoucherReportTransfer(Report):
     'Voucher Report Transfer'

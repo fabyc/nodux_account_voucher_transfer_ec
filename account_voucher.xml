@@ -26,5 +26,16 @@ the full copyright notices and license terms. -->
         <field name="action" ref="report_account_voucher_transfer"/>
     </record>
 
+    <record model="ir.ui.view" id="account_lines_view_tree">
+        <field name="model">account.voucher.line.account</field>
+        <field name="type">tree</field>
+        <field name="name">account_lines_tree</field>
+    </record>
+
+    <record model="ir.ui.view" id="account_lines_view_form">
+        <field name="model">account.voucher.line.account</field>
+        <field name="type">form</field>
+        <field name="name">account_lines_form</field>
+    </record>
   </data>
 </tryton>

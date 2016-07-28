@@ -2,25 +2,24 @@
 <!-- This file is part of the nodux_account_voucher_ec module for Tryton.
 The COPYRIGHT file at the top level of this repository contains
 the full copyright notices and license terms. -->
-
 <data>
-    <xpath expr="/form/field[@name=&quot;from_pay_invoice&quot;]"
+    <xpath expr="/form/field[@name=&quot;description&quot;]"
             position="after">
+            <newline/>
             <label name="transfer"/>
             <field name="transfer"/>
             <newline/>
-            <label name="cuenta_caja"/>
-            <field name="cuenta_caja"/>
+            <field name="valor_caja" invisible="1"/>
+            <newline/>
+            <field name="cuenta_inicial" mode="tree" colspan="3"
+                view_ids="nodux_account_voucher_transfer_ec.account_lines_view_tree,nodux_account_voucher_transfer_ec.account_lines_view_form"/>
             <newline/>
             <label name="cuenta_transfer"/>
             <field name="cuenta_transfer"/>
             <newline/>
-            <label name="valor_caja"/>
-            <field name="valor_caja"/>
-            <newline/>
-            <group colspan="6" id="group_voucher_2">
+            <group colspan="2" id="group_voucher_2">
                 <button name="transferir" string="_Transferir"/>
             </group>
+            <newline/>
     </xpath>
-
 </data>
