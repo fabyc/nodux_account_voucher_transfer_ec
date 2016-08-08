@@ -63,7 +63,7 @@ class AccountVoucher(ModelSQL, ModelView):
 
         cls._buttons.update({
                 'post': {
-                    'invisible': Eval('transfer', True),
+                    'invisible': (Eval('transfer', True)) | (Eval('state') != 'draft'),
                     'readonly': In(Eval('state'), ['posted']),
                     },
                 })
