@@ -8,6 +8,7 @@ from .account_voucher import *
 def register():
     Pool.register(
         AccountVoucher,
+        AccountVoucherLineAccount,
         module='nodux_account_voucher_transfer_ec', type_='model')
     Pool.register(
         VoucherReportTransfer,

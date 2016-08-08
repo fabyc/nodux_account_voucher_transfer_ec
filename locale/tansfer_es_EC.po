@@ -1,0 +1,95 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.voucher,cuenta_inicial:"
+msgid "Cuentas"
+msgstr ""
+
+msgctxt "field:account.voucher,cuenta_transfer:"
+msgid "Cuenta a transferir el dinero"
+msgstr ""
+
+msgctxt "field:account.voucher,valor_caja:"
+msgid "Importe"
+msgstr ""
+
+msgctxt "field:account.voucher.line.account,account:"
+msgid "Account"
+msgstr "Cuenta"
+
+msgctxt "field:account.voucher.line.account,create_date:"
+msgid "Create Date"
+msgstr "Fecha de Creación"
+
+msgctxt "field:account.voucher.line.account,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:account.voucher.line.account,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.voucher.line.account,pay_amount:"
+msgid "Pay Amount"
+msgstr "Importe"
+
+msgctxt "field:account.voucher.line.account,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:account.voucher.line.account,voucher:"
+msgid "Voucher"
+msgstr "Comprobantes"
+
+msgctxt "field:account.voucher.line.account,write_date:"
+msgid "Write Date"
+msgstr "Modificado por usuario"
+
+msgctxt "field:account.voucher.line.account,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "model:account.voucher.line.account,name:"
+msgid "Account Voucher Line Account"
+msgstr "Cuenta comprobante contable"
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "BITO"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "CRÉDIT"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "CUENTA"
+msgstr "CUENTA"
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "CÓDIGO"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "DESCRIPCIÓN"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "DÉ"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "O"
+msgstr ""
+
+msgctxt "odt:account.voucher_transfer.report:"
+msgid "RUC"
+msgstr "RUC"
+
+msgctxt "view:account.voucher.line.account:"
+msgid "Accounts"
+msgstr "Cuentas"
+
+msgctxt "view:account.voucher:"
+msgid "_Transferir"
+msgstr ""
