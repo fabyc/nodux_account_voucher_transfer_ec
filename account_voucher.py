@@ -70,7 +70,7 @@ class AccountVoucher(ModelSQL, ModelView):
 
         del cls.party.states['required']
         cls.party.states['required'] = ~Eval('transfer', True)
-        cls.party.states['invisible'] = Eval('transfer', True)
+        cls.party.states['readonly'] |= Eval('transfer', True)
         cls.voucher_type.states['invisible'] = Eval('transfer', True)
         cls.pay_lines.states['invisible'] = Eval('transfer', True)
         cls.lines.states['invisible'] = Eval('transfer', True)
